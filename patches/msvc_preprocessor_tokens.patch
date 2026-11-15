@@ -1,0 +1,164 @@
+diff --git a/src/config.h b/src/config.h
+index f6cec3e..8d1c951 100644
+--- a/src/config.h
++++ b/src/config.h
+@@ -33,7 +33,7 @@ enum fileFormat { DIPHA, PERSEUS, NUMPY };
+ 
+ using namespace std;
+ 
+-#if defined(PARALLELIZE_INDEPENDENT_BARCODES_DIM1) and                         \
++#if defined(PARALLELIZE_INDEPENDENT_BARCODES_DIM1) &&                         \
+     defined(USE_CLEARING_IMAGE)
+ static_assert(false,
+               "PARALLELIZE_INDEPENDENT_BARCODES_DIM1 is active alongside "
+diff --git a/src/src_3D/dimension_1.cpp b/src/src_3D/dimension_1.cpp
+index 947d73e..5b746f3 100644
+--- a/src/src_3D/dimension_1.cpp
++++ b/src/src_3D/dimension_1.cpp
+@@ -86,7 +86,7 @@ void Dimension1::computePairsAndMatch(vector<Cube> &ctr0, vector<Cube> &ctr1,
+     };
+ 
+     auto processImageInput0Comparison = [this,
+-#if not(defined(USE_APPARENT_PAIRS_COMP) or defined(USE_CLEARING_DIM0))
++#if !(defined(USE_APPARENT_PAIRS_COMP) || defined(USE_CLEARING_DIM0))
+                                          &ctrComp,
+ #endif
+                                          &ctrImage]() {
+@@ -94,7 +94,7 @@ void Dimension1::computePairsAndMatch(vector<Cube> &ctr0, vector<Cube> &ctr1,
+         cout << endl << "image 0: ";
+ #endif
+ 
+-#if defined(USE_APPARENT_PAIRS_COMP) or defined(USE_CLEARING_DIM0)
++#if defined(USE_APPARENT_PAIRS_COMP) || defined(USE_CLEARING_DIM0)
+         computePairsImage(ctrImage, 0);
+ #else
+         computePairsImage(ctrComp, 0);
+@@ -102,7 +102,7 @@ void Dimension1::computePairsAndMatch(vector<Cube> &ctr0, vector<Cube> &ctr1,
+     };
+ 
+     auto processImageInput1Comparison = [this,
+-#if not(defined(USE_APPARENT_PAIRS_COMP) or defined(USE_CLEARING_DIM0))
++#if !(defined(USE_APPARENT_PAIRS_COMP) || defined(USE_CLEARING_DIM0))
+                                          &ctrComp,
+ #endif
+                                          &ctrImage]() {
+@@ -110,7 +110,7 @@ void Dimension1::computePairsAndMatch(vector<Cube> &ctr0, vector<Cube> &ctr1,
+         cout << endl << "image 1: ";
+ #endif
+ 
+-#if defined(USE_APPARENT_PAIRS_COMP) or defined(USE_CLEARING_DIM0)
++#if defined(USE_APPARENT_PAIRS_COMP) || defined(USE_CLEARING_DIM0)
+         computePairsImage(ctrImage, 1);
+ #else
+         computePairsImage(ctrComp, 1);
+@@ -121,7 +121,7 @@ void Dimension1::computePairsAndMatch(vector<Cube> &ctr0, vector<Cube> &ctr1,
+     auto comparisonFuture = std::async(processComparison);
+     auto input0Future = std::async(processInput0);
+     auto input1Future = std::async(processInput1);
+-#if defined(USE_APPARENT_PAIRS_COMP) or defined(USE_CLEARING_DIM0) or          \
++#if defined(USE_APPARENT_PAIRS_COMP) || defined(USE_CLEARING_DIM0) ||          \
+     defined(USE_ISPAIRED)
+     comparisonFuture.wait();
+ #endif
+@@ -131,7 +131,7 @@ void Dimension1::computePairsAndMatch(vector<Cube> &ctr0, vector<Cube> &ctr1,
+     input1Future.wait();
+     imageInput0ComparisonFuture.wait();
+     imageInput1ComparisonFuture.wait();
+-#if not(defined(USE_APPARENT_PAIRS_COMP) or defined(USE_CLEARING_DIM0) or      \
++#if !(defined(USE_APPARENT_PAIRS_COMP) || defined(USE_CLEARING_DIM0) ||      \
+         defined(USE_ISPAIRED))
+     comparisonFuture.wait();
+ #endif
+@@ -445,7 +445,7 @@ bool Dimension1::isEmergentPair(const Cube &column, Cube &pivot, size_t &j,
+                     checkEmergentPair = false;
+                     j = *nextColumnIndex;
+                 }
+-#if defined(USE_APPARENT_PAIRS) or defined(USE_APPARENT_PAIRS_COMP)
++#if defined(USE_APPARENT_PAIRS) || defined(USE_APPARENT_PAIRS_COMP)
+                 else if ((computePairsMode == INPUT_PAIRS ||
+                           computePairsMode == COMPARISON_PAIRS) &&
+                          pivotOfColumnIsApparentPair(
+@@ -475,7 +475,7 @@ bool Dimension1::isEmergentPair(const Cube &column, Cube &pivot, size_t &j,
+ }
+ #endif
+ 
+-#if defined(USE_APPARENT_PAIRS) or defined(USE_APPARENT_PAIRS_COMP)
++#if defined(USE_APPARENT_PAIRS) || defined(USE_APPARENT_PAIRS_COMP)
+ bool Dimension1::pivotIsApparentPair(const Cube &pivot, vector<Cube> &faces,
+                                      BoundaryEnumerator &enumerator,
+                                      CoboundaryEnumerator &coEnumerator) const {
+@@ -567,7 +567,7 @@ void Dimension1::computePairsUnified(vector<Cube> &ctr, uint8_t k
+             ? pivotColumnIndexComp
+             : ((k == 0) ? pivotColumnIndexImage0 : pivotColumnIndexImage1);
+ 
+-#if defined(USE_APPARENT_PAIRS) or defined(USE_APPARENT_PAIRS_COMP)
++#if defined(USE_APPARENT_PAIRS) || defined(USE_APPARENT_PAIRS_COMP)
+     const bool useApparentPairs =
+ #ifdef USE_APPARENT_PAIRS
+         true;
+@@ -575,7 +575,7 @@ void Dimension1::computePairsUnified(vector<Cube> &ctr, uint8_t k
+         false;
+ #endif
+ #endif
+-#if defined(USE_APPARENT_PAIRS) or defined(USE_APPARENT_PAIRS_COMP) or         \
++#if defined(USE_APPARENT_PAIRS) || defined(USE_APPARENT_PAIRS_COMP) ||         \
+     defined(USE_CLEARING_IMAGE)
+     const bool useApparentPairsComp =
+ #ifdef USE_APPARENT_PAIRS_COMP
+@@ -613,7 +613,7 @@ void Dimension1::computePairsUnified(vector<Cube> &ctr, uint8_t k
+     BoundaryEnumerator enumeratorAP(cgc);
+     CoboundaryEnumerator coEnumeratorAP(cgc);
+     if (computePairsMode == COMPARISON_PAIRS) {
+-#if defined(USE_CLEARING_IMAGE) and not defined(USE_APPARENT_PAIRS_COMP)
++#if defined(USE_CLEARING_IMAGE) && ! defined(USE_APPARENT_PAIRS_COMP)
+         shouldClear = false;
+ #endif
+     }
+@@ -702,7 +702,7 @@ void Dimension1::computePairsUnified(vector<Cube> &ctr, uint8_t k
+             }
+             pivot = getPivot(workingBoundary);
+ 
+-#if defined(USE_APPARENT_PAIRS) or defined(USE_APPARENT_PAIRS_COMP)
++#if defined(USE_APPARENT_PAIRS) || defined(USE_APPARENT_PAIRS_COMP)
+             if ((useApparentPairs && computePairsMode == INPUT_PAIRS) ||
+                 (useApparentPairsComp &&
+                  computePairsMode == COMPARISON_PAIRS)) {
+diff --git a/src/src_3D/dimension_1.h b/src/src_3D/dimension_1.h
+index 12157ba..fb48538 100644
+--- a/src/src_3D/dimension_1.h
++++ b/src/src_3D/dimension_1.h
+@@ -71,7 +71,7 @@ class Dimension1 {
+                   queue<uint64_t> &cachedColumnIdx,
+                   CubeMap<2, vector<Cube>> &cache);
+ #endif
+-#if defined(USE_APPARENT_PAIRS) or defined(USE_APPARENT_PAIRS_COMP)
++#if defined(USE_APPARENT_PAIRS) || defined(USE_APPARENT_PAIRS_COMP)
+     bool pivotIsApparentPair(const Cube &pivot, vector<Cube> &faces,
+                              BoundaryEnumerator &enumerator,
+                              CoboundaryEnumerator &coEnumerator) const;
+diff --git a/src/src_3D/dimension_2.cpp b/src/src_3D/dimension_2.cpp
+index ac86d5b..1a3d893 100644
+--- a/src/src_3D/dimension_2.cpp
++++ b/src/src_3D/dimension_2.cpp
+@@ -367,7 +367,7 @@ void Dimension2::computeCompPairsAndMatch(vector<Cube> &dualEdges,
+ #endif
+ }
+ 
+-#if defined(USE_APPARENT_PAIRS) or defined(USE_APPARENT_PAIRS_COMP)
++#if defined(USE_APPARENT_PAIRS) || defined(USE_APPARENT_PAIRS_COMP)
+ bool Dimension2::isApparentPair(const Cube &dualEdge,
+                                 BoundaryEnumerator &enumerator,
+                                 CoboundaryEnumerator &coEnumerator) const {
+diff --git a/src/src_3D/dimension_2.h b/src/src_3D/dimension_2.h
+index c0010cd..026b436 100644
+--- a/src/src_3D/dimension_2.h
++++ b/src/src_3D/dimension_2.h
+@@ -34,7 +34,7 @@ class Dimension2 {
+     void computeInputAndImagePairs(vector<Cube> &dualEdges, const uint8_t &k);
+     void computeCompPairsAndMatch(vector<Cube> &dualEdges,
+                                   vector<Cube> &ctrImage);
+-#if defined(USE_APPARENT_PAIRS) or defined(USE_APPARENT_PAIRS_COMP)
++#if defined(USE_APPARENT_PAIRS) || defined(USE_APPARENT_PAIRS_COMP)
+     bool isApparentPair(const Cube &dualEdge, BoundaryEnumerator &enumerator,
+                         CoboundaryEnumerator &coEnumerator) const;
+ #endif
