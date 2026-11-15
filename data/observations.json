@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "measurement_date": "2026-10-19",
+  "shape": [
+    125,
+    256,
+    128
+  ],
+  "repetitions": 5,
+  "environment": {
+    "os": "Windows-10-10.0.19045-SP0",
+    "python": "3.13.5",
+    "cpu": "Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz",
+    "cores_physical": 6,
+    "cores_logical": 12,
+    "ram_gb": 15.9,
+    "numpy": "2.1.3"
+  },
+  "implementation": {
+    "repository": "https://github.com/nstucki/Betti-Matching-3D",
+    "commit": "db623be7456ae451beb422af3bbcea94e9863a8f",
+    "compiler": "MSVC 19.44",
+    "preprocessor_token_patch": true,
+    "historical_binary_sha256": null
+  },
+  "calibration": {
+    "checkpoint": 4000,
+    "split": "val",
+    "full_wall_median_s": 17.975970099999927,
+    "full_cpu_median_s": 25.890625,
+    "alpha_wall_saved": 1.0796427649578302,
+    "configurations": [
+      {
+        "core_side": 16,
+        "margin": 4,
+        "window_count": 1024,
+        "windows_wall_sum_medians_s": 36.62459559999894,
+        "windows_cpu_sum_medians_s": 45.4375
+      },
+      {
+        "core_side": 16,
+        "margin": 8,
+        "window_count": 1024,
+        "windows_wall_sum_medians_s": 87.65863990000383,
+        "windows_cpu_sum_medians_s": 113.1875
+      },
+      {
+        "core_side": 32,
+        "margin": 4,
+        "window_count": 128,
+        "windows_wall_sum_medians_s": 23.029303199999788,
+        "windows_cpu_sum_medians_s": 30.46875
+      },
+      {
+        "core_side": 32,
+        "margin": 8,
+        "window_count": 128,
+        "windows_wall_sum_medians_s": 37.115490900000566,
+        "windows_cpu_sum_medians_s": 49.71875
+      },
+      {
+        "core_side": 64,
+        "margin": 4,
+        "window_count": 16,
+        "windows_wall_sum_medians_s": 17.9336275,
+        "windows_cpu_sum_medians_s": 25.0625
+      },
+      {
+        "core_side": 64,
+        "margin": 8,
+        "window_count": 16,
+        "windows_wall_sum_medians_s": 22.012207200000034,
+        "windows_cpu_sum_medians_s": 30.8125
+      }
+    ]
+  },
+  "test": {
+    "core_side": 32,
+    "margin": 4,
+    "checkpoints": {
+      "500": {
+        "full_wall_passes_s": [
+          18.488609300000007,
+          18.212699300000054,
+          18.385943399999974,
+          18.222297000000026,
+          18.23361669999997
+        ],
+        "windows_wall_passes_s": [
+          24.236716899999976,
+          23.531616299999996,
+          23.66691549999996,
+          23.46242319999999,
+          23.560649300000023
+        ],
+        "full_wall_median_s": 18.23361669999997,
+        "windows_wall_median_s": 23.560649300000023,
+        "all_window_discrepancy": {
+          "L_ratio": 0.856213385490986,
+          "cos": 0.7705341121217238,
+          "rel_l2": 0.6649274910940979
+        }
+      },
+      "1500": {
+        "full_wall_passes_s": [
+          17.846987900000045,
+          17.91065679999997,
+          21.354991400000017,
+          17.88206459999992,
+          18.018174099999896
+        ],
+        "windows_wall_passes_s": [
+          22.75427389999993,
+          22.738005899999962,
+          23.59734790000016,
+          22.64575859999991,
+          22.637336700000105
+        ],
+        "full_wall_median_s": 17.91065679999997,
+        "windows_wall_median_s": 22.738005899999962,
+        "all_window_discrepancy": {
+          "L_ratio": 0.8151061551210053,
+          "cos": 0.7137864418658545,
+          "rel_l2": 0.7402526111103603
+        }
+      },
+      "4000": {
+        "full_wall_passes_s": [
+          17.715256699999827,
+          17.716580900000054,
+          17.71858169999996,
+          17.804918999999927,
+          17.894104799999923
+        ],
+        "windows_wall_passes_s": [
+          22.38918919999992,
+          22.293639600000006,
+          22.408472000000074,
+          22.397209900000007,
+          22.398013099999844
+        ],
+        "full_wall_median_s": 17.71858169999996,
+        "windows_wall_median_s": 22.397209900000007,
+        "all_window_discrepancy": {
+          "L_ratio": 0.7267784591973341,
+          "cos": 0.7271964330172237,
+          "rel_l2": 0.6982754141561344
+        }
+      }
+    }
+  },
+  "test_larger_windows": {
+    "checkpoint": 4000,
+    "core_side": 64,
+    "margin": 4,
+    "windows_wall_passes_s": [
+      17.77882199999999,
+      17.756359699999848,
+      18.759638900000027,
+      17.787252900000112,
+      17.852844100000084
+    ],
+    "windows_wall_median_s": 17.787252900000112
+  },
+  "parallel": {
+    "checkpoint": 4000,
+    "core_side": 32,
+    "margin": 4,
+    "chunk": 12,
+    "full_wall_median_s": 17.760958200000005,
+    "windows_wall_median_s": 5.828091500000028
+  }
+}
