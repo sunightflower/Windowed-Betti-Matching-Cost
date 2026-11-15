@@ -1,0 +1,9 @@
+.ipynb_checkpoints/
+__pycache__/
+.venv/
+output/
+new_measurements/
+predictions.npz
+H1_preds.npz
+*.pyd
+*.so
